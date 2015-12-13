@@ -12,39 +12,11 @@
  */
 bool do_state() {
 
-	rtc_wakupe();						// see rtc.h
-	set_sleep_mode(SLEEP_MODE_PWR_SAVE);// Power Safe - only rtc is active
+	set_sleep_mode(SLEEP_MODE_IDLE);	// IDLE - we still need PWM
 	sleep_enable();						// Enable sleep
 	sleep_mode();						// Enter sleep mode
+	rtc_wakupe();						// see rtc.h
 	sleep_disable();					// First thing to do is disable sleep
-
-	return false;
-
-}
-
-bool do_pwm() {
-
-    uint8_t brightness;
-
-	// increasing brightness
-	for (brightness = 0; brightness < 255; ++brightness)
-	{
-		// set the brightness as duty cycle
-		OCR0B = brightness;
-
-		// delay so as to make the user "see" the change in brightness
-		_delay_ms(10);
-	}
-
-	// decreasing brightness
-	for (brightness = 255; brightness > 0; --brightness)
-	{
-		// set the brightness as duty cycle
-		OCR0B = brightness;
-
-		// delay so as to make the user "see" the change in brightness
-		_delay_ms(10);
-	}
 
 	return false;
 
@@ -81,8 +53,7 @@ void run_stateEngine() {
 
 	do {
 
-		//reset = do_state();
-		reset = do_pwm();
+		reset = do_state();
 
 	} while (!reset);
 

@@ -35,6 +35,16 @@ void boot() {
 	// make sure to make OC0B/PD5 pin as output pin
 	DDRD = _BV(PD5);
 
+	/*
+	 * init ADC
+	 */
+
+	// AREF = AVcc
+	ADMUX = _BV(REFS0);
+
+	// Enable ADC and set prescaler to 64 = 4MHz / 64 = 64kHz
+	ADCSRA = _BV(ADEN) | _BV(ADPS2) | _BV(ADPS1);
+
 }
 
 /*
